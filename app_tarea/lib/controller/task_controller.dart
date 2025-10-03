@@ -1,4 +1,3 @@
-// logica del controlador de la tarea (lo que va detras)
 import 'package:app_tarea/models/task.dart';
 import 'package:app_tarea/models/task_filter.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +6,18 @@ class TaskController extends ChangeNotifier {
   final List<Task> _tasks = [
     Task(
       title: "Jugar de todo un poco",
-      note: "Tengo muchas ganas de jugar",
+      note: "Tengo muchas ganas de jugar y de tomar coca cola",
       due: DateTime.now().add(const Duration(days: 2)),
     ),
     Task(
-      title: "Llevar a mi perrita al veterinario",
-      note: "Hay que llevarlo a control",
+      title: "Llevar a Tiana al veterinario",
+      note: "Hay que llevar a ese perrito a control",
       due: DateTime.now().add(const Duration(days: 1)),
     ),
     Task(
-      title: "Entrgar prueba",
-      note: "Ultimo plazo para la prueba",
+      title: "Entregar la prueba",
+      note:
+          "Odio a este caballero, pero tengo que entregarle la prueba de móvil",
       due: DateTime.now().add(const Duration(days: 1)),
     ),
   ];
@@ -26,24 +26,21 @@ class TaskController extends ChangeNotifier {
 
   TaskFilter _filter = TaskFilter.all;
 
-  List<Task> get task => List.unmodifiable(_tasks); //accesador
+  List<Task> get task => List.unmodifiable(_tasks);
 
   String get query => _query;
 
   TaskFilter get filter => _filter;
 
-  // Filtra por palabra
   List<Task> get filtered {
-    final q = _query
-        .trim()
-        .toLowerCase(); // sacar espacios(trim) llevar minusculas
-
+    final q = _query.trim().toLowerCase();
     return _tasks.where((t) {
       final byFilter = switch (_filter) {
         TaskFilter.all => true,
         TaskFilter.pending => !t.done,
         TaskFilter.done => t.done,
       };
+
       final byQuery =
           q.isEmpty ||
           t.title.toLowerCase().contains(q) ||
@@ -52,7 +49,6 @@ class TaskController extends ChangeNotifier {
     }).toList();
   }
 
-  // cada vez que se haga un cambio se llama esta función
   void setQuery(String value) {
     _query = value;
     notifyListeners();
